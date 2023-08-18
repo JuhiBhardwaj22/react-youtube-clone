@@ -3,50 +3,53 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeTogglemenu } from "../../../utils/store/appSlice";
 import { useSearchParams } from "react-router-dom";
 import { CommentContainer } from "./CommentContainer";
-import {YOUTUBE_VIDEO_WATCH_API} from "../../../utils/constant"
-import likeIcon from '../../../assets/img/like.svg';
-import disLikeIcon from '../../../assets/img/dislike.svg';
-import shareIcon from '../../../assets/img/share.svg';
-import downloadIcon from '../../../assets/img/download.svg';
-import moreIcon from '../../../assets/img/more.svg';
+import { YOUTUBE_VIDEO_WATCH_API } from "../../../utils/constant";
+import likeIcon from "../../../assets/img/like.svg";
+import disLikeIcon from "../../../assets/img/dislike.svg";
+import shareIcon from "../../../assets/img/share.svg";
+import downloadIcon from "../../../assets/img/download.svg";
+import moreIcon from "../../../assets/img/more.svg";
+import LiveChat from "./LiveChat";
 
 export const WatchPage = () => {
-  const[video,setVideos] =useState({})
+  const [video, setVideos] = useState({});
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   let videoId = searchParams.get("v");
-
 
   useEffect(() => {
     dispatch(closeTogglemenu());
     getwatchVidosDetails();
   }, [videoId]);
 
- const getwatchVidosDetails = async() =>{
-  const data = await fetch(YOUTUBE_VIDEO_WATCH_API + videoId);
-  const watchData = await data.json();
+  const getwatchVidosDetails = async () => {
+    const data = await fetch(YOUTUBE_VIDEO_WATCH_API + videoId);
+    const watchData = await data.json();
 
-  console.log("watchdata",watchData.items)
-  setVideos(watchData?.items[0])
-  console.log("{video?.snippet?.title",video?.snippet?.title)
- }
+    console.log("watchdata", watchData.items);
+    setVideos(watchData?.items[0]);
+    console.log("{video?.snippet?.title", video?.snippet?.title);
+  };
   return (
     <div
       className={`${!isMenuOpen ? "px-20" : "px-3"} col-span-11 pt-6 flex-col`}
     >
       <div className="flex-grow-9">
-       <div>
-       <iframe
-          width="800"
-          height="400"
-          src={"https://www.youtube.com/embed/" + videoId}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullscreen
-        ></iframe>
-       </div>
+        <div className="flex">
+          <iframe
+            width="800"
+            height="400"
+            src={"https://www.youtube.com/embed/" + videoId}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullscreen
+          ></iframe>
+          <div className="">
+            <LiveChat />
+          </div>
+        </div>
       </div>
       <div className="p-2 m-2">
         <div>
